@@ -29,4 +29,28 @@ alterat starea sistemului de fișiere. De exemplu, daca de la ultima comandă de
 operație de touch va fi adăugată în staging. În momentul în care se execută operația vcs commit, atunci staging-ul va 
 fi golit, iar HEAD-ul se va muta pe noul commit. În momentul în care se execută operația vcs rollback, atunci 
 staging-ul va fi golit, HEAD-ul va rămâne pe commit-ul curent, iar activeFileSystemSnapshot va reveni la valoarea din 
-commit-ului curent. 
+commit-ului curent.
+
+Implementare:
+
+Proiectul este împărțit în 2 părți: operațiile de filesystem și cele de vcs. 
+Fiecare comandă va fi citită dintr-un fișier de intrare și va genera un output sau un mesaj de eroare ce va fi 
+scris în fisierul de iesire.
+
+Structure Description:
+
+Clasa Main este folosita drept entry point.
+Va primi in linia de comanda fisiere de intrare/iesire.
+
+IDGenerator este folosit pentru a genera id-uri unice pentru fisiere,
+directoare si commituri.
+
+OperationParser are rolul de a parsa o linie fisierul de intrare si de a chema
+OperationFactory pentru a crea operatiile specifice.
+Atat OperationParser, cat si OperationFactory trebuie sa fie completate cu 
+metodele de parsare/creare specifice operatiilor de vcs.
+
+Toate mesajele de eroare necesare acestei aplicatii sunt definite in ErrorCodeManager.
+
+Clasa Vcs contine un activeSnapshot. El este, de fapt, instanta curenta de
+filesystem pe care se ruleaza comenzile de filesystem.
